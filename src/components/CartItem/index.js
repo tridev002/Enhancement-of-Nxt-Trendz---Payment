@@ -8,12 +8,25 @@ import './index.css'
 const CartItem = props => (
   <CartContext.Consumer>
     {value => {
-      const {deleteCartItem} = value
+      const {
+        removeCartItem,
+        incrementCartItemQuantity,
+        decrementCartItemQuantity,
+      } = value
       const {cartItemDetails} = props
       const {id, title, brand, quantity, price, imageUrl} = cartItemDetails
-      const onDeleteCartItem = () => {
-        deleteCartItem(id)
+      const onRemoveCartItem = () => {
+        removeCartItem(id)
       }
+
+      const onIncrementCartItemQty = () => {
+        incrementCartItemQuantity(id)
+      }
+
+      const onDecrementCartItemQty = () => {
+        decrementCartItemQuantity(id)
+      }
+
       return (
         <li className="cart-item">
           <img className="cart-product-image" src={imageUrl} alt={title} />
@@ -23,20 +36,32 @@ const CartItem = props => (
               <p className="cart-product-brand">by {brand}</p>
             </div>
             <div className="cart-quantity-container">
-              <button type="button" className="quantity-controller-button">
+              <button
+                type="button"
+                className="quantity-controller-button"
+                aria-label="Mute volume"
+                onClick={onDecrementCartItemQty}
+                data-testid="minus"
+              >
                 <BsDashSquare color="#52606D" size={12} />
               </button>
               <p className="cart-quantity">{quantity}</p>
-              <button type="button" className="quantity-controller-button">
+              <button
+                type="button"
+                className="quantity-controller-button"
+                aria-label="Mute volume"
+                onClick={onIncrementCartItemQty}
+                data-testid="plus"
+              >
                 <BsPlusSquare color="#52606D" size={12} />
               </button>
             </div>
-            <div className="total-price-delete-container">
+            <div className="total-price-remove-container">
               <p className="cart-total-price">Rs {price * quantity}/-</p>
               <button
                 className="remove-button"
                 type="button"
-                onClick={onDeleteCartItem}
+                onClick={onRemoveCartItem}
               >
                 Remove
               </button>
@@ -45,7 +70,9 @@ const CartItem = props => (
           <button
             className="delete-button"
             type="button"
-            onClick={onDeleteCartItem}
+            aria-label="Mute volume" // Check this
+            onClick={onRemoveCartItem}
+            data-testid="remove"
           >
             <AiFillCloseCircle color="#616E7C" size={20} />
           </button>
